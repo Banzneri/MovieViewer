@@ -10,42 +10,42 @@ import Header from './components/Header'
 const BASE_URL = 'http://localhost:3001/api/movies'
 
 const App = () => {
-  const [ movies, setMovies ] = useState([])
-  const [ filter, setFilter ] = useState('')
-  const [ searching, setSearching ] = useState(false)
-  const [ movie, setMovie ] = useState({})
+  const [ shownMovies, setShownMovies ] = useState([])
+  const [ searchFilter, setSearchFilter ] = useState('')
+  const [ isSearching, setIsSearching ] = useState(false)
+  const [ selectedMovie, setSelectedMovie ] = useState({})
   const [ savedMovies, setSavedMovies ] = useState([])
   const [ scrollPosition, setScrollPosition ] = useState(0)
   const [ favouriteMovies, setFavouriteMovies ] = useState([])
 
   const handleSearchFilterUpdate = event => {
-    setFilter(event.target.value)
+    setSearchFilter(event.target.value)
   }
 
   const handleMovieSelect = name => {
-    setMovie(name)
-    setSavedMovies(movies)
-    setMovies([])
+    setSelectedMovie(name)
+    setSavedMovies(shownMovies)
+    setShownMovies([])
     setScrollPosition(window.scrollY)
   }
 
   const handleMovieSearchSubmit = event => {
     event.preventDefault()
-    const movieFilter = filter
-    setSearching(true)
-    setMovies([])
-    setMovie('')
+    const movieFilter = searchFilter
+    setIsSearching(true)
+    setShownMovies([])
+    setSelectedMovie('')
 
     axios
       .get(`${BASE_URL}/${movieFilter}`)
         .then(movie => {
           console.log(movie)
-          setMovies(movie.data)
-          setSearching(false)
+          setShownMovies(movie.data)
+          setIsSearching(false)
         })
         .catch(error => {
-          setMovies([])
-          setSearching(false)
+          setShownMovies([])
+          setIsSearching(false)
       })
   }
 
@@ -54,8 +54,8 @@ const App = () => {
   }
 
   const handleFullMovieDescriptionClose = () => {
-    setMovie({})
-    setMovies(savedMovies)
+    setSelectedMovie({})
+    setShownMovies(savedMovies)
     setTimeout(() => window.scroll(0, scrollPosition), 1)
   }
 
@@ -68,8 +68,8 @@ const App = () => {
   }
 
   const handleShowFavourites = () => {
-    setSavedMovies(movies)
-    setMovies(favouriteMovies)
+    setSavedMovies(shownMovies)
+    setShownMovies(favouriteMovies)
   }
 
   return (
@@ -79,16 +79,16 @@ const App = () => {
         handleFilter={handleSearchFilterUpdate}
         handleShowFavourites={handleShowFavourites}
       />
-      {searching && <SearchingImage />}
-      {movie._id 
-        ? <FullMovieDescription movie={movie} 
+      {isSearching && <SearchingImage />}
+      {selectedMovie._id 
+        ? <FullMovieDescription movie={selectedMovie} 
             handleMovieClose={handleFullMovieDescriptionClose}
             handleFavouriteMovies={handleFavouriteMovieAdding}
             favourites={favouriteMovies}/> 
         : null}
       <div className='flex-container'>
-        {movies.length > 0
-          ? movies.map(movie => 
+        {shownMovies.length > 0
+          ? shownMovies.map(movie => 
               <MovieCard className='column'
                 key={`${movie._id}`}
                 movie={movie}
