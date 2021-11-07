@@ -8,8 +8,11 @@ const FullMovieDescription = ({ movie, handleMovieClose, handleFavouriteMovies, 
     return (
         <div className='full-movie'>
           <div className='full-info'>
-            <h2>{movie.title}</h2>
-            <br />
+            <div className='flex-container'>
+              <h2>{movie.title}</h2>
+              <CloseIcon onClick={handleMovieClose} className='close-icon hover-icon'/>
+            </div>
+            <br/>
             <p>{movie.fullplot}</p>
             <div className='full-details'>
                 | {movie.year} | {movie.countries.toString()} | {movie.runtime} min |
@@ -17,7 +20,6 @@ const FullMovieDescription = ({ movie, handleMovieClose, handleFavouriteMovies, 
                 />
             </div>
           </div>
-          <CloseIcon onClick={handleMovieClose} className='close-icon hover-icon'/>
         </div>
     );
 }

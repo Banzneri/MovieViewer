@@ -31,13 +31,12 @@ const App = () => {
 
   const handleMovieSearchSubmit = event => {
     event.preventDefault()
-    const movieFilter = searchFilter
     setIsSearching(true)
     setShownMovies([])
     setSelectedMovie('')
 
     axios
-      .get(`${BASE_URL}/${movieFilter}`)
+      .get(`${BASE_URL}/${searchFilter}`)
         .then(movie => {
           console.log(movie)
           setShownMovies(movie.data)
@@ -56,7 +55,7 @@ const App = () => {
   const handleFullMovieDescriptionClose = () => {
     setSelectedMovie({})
     setShownMovies(savedMovies)
-    setTimeout(() => window.scroll(0, scrollPosition), 1)
+    setTimeout(() => window.scroll(0, scrollPosition), 0.01)
   }
 
   const handleFavouriteMovieAdding = (movie) => {
@@ -74,19 +73,17 @@ const App = () => {
 
   return (
     <div id='wrapper'>
-      <Header headerText='MOVIEVIEWER' 
-        handleSubmit={handleMovieSearchSubmit}
-        handleFilter={handleSearchFilterUpdate}
-        handleShowFavourites={handleShowFavourites}
-      />
-      {isSearching && <SearchingImage />}
-      {selectedMovie._id 
-        ? <FullMovieDescription movie={selectedMovie} 
+      {!selectedMovie._id 
+        ? <Header headerText='MOVIEVIEWER' 
+            handleSubmit={handleMovieSearchSubmit}
+            handleFilter={handleSearchFilterUpdate}
+            handleShowFavourites={handleShowFavourites} />
+        : <FullMovieDescription movie={selectedMovie} 
             handleMovieClose={handleFullMovieDescriptionClose}
             handleFavouriteMovies={handleFavouriteMovieAdding}
-            favourites={favouriteMovies}/> 
-        : null}
-      <div className='flex-container'>
+            favourites={favouriteMovies} /> }
+      {isSearching && <SearchingImage />}
+      <div className='grid-container'>
         {shownMovies.length > 0
           ? shownMovies.map(movie => 
               <MovieCard className='column'

@@ -1,9 +1,14 @@
-const InputField = ({ handleSubmit, handleFilter }) => (
-  <div className='inputField'>
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
+import AddIcon from '@mui/icons-material/Add'; 
+
+const InputField = ({ handleSubmit, handleFilter, handleShowFavourites}) => (
+  <div className='input-field flex-container'>
     <form onSubmit={handleSubmit}>
-      <input type='text' onChange={handleFilter} />
-      <input type='submit' />
+      <TextField className='text-field' id='search-field' label='search' variant='filled' onChange={handleFilter} />
+      <Button id='submit-button' className='button' type='submit' variant='contained'>Search</Button>
     </form>
+    <AddIcon id='favourites-button' onClick={handleShowFavourites} />
   </div>
 )
 
